@@ -16,4 +16,5 @@
 - [Дослідження](research/)
 - [Дослідження екранів](research/screens/)
 - [03. Конкуренти й референси](research/notes/03-competitors.md)
+- [04. Матриця конкурентів](research/notes/04-matrix.md)
 - Навігатор: [дерево сторінок](_nav/tree.js), [скрипт](_nav/nav.js), [стилі](_nav/nav.css)
