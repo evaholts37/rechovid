@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="Зведення дослідження Rechovid: конкуренти, бенчмарк, патерни й гіпотези продукту.">
+    <title>Дослідження — Rechovid</title>
+    <link rel="stylesheet" href="../_nav/nav.css">
+    <script src="../_nav/tree.js" defer></script>
+    <script src="../_nav/nav.js" data-root="../" defer></script>
+    <style>
+      .research-page {
+        --ink: #edf1f0;
+        --muted: #aab8b5;
+        --quiet: #91a19e;
+        --line: #34403e;
+        --panel: #171e1e;
+        --accent: #b6ded1;
+        background: #101616;
+        color: var(--ink);
+        color-scheme: dark;
+      }
+
+      .research-page [data-repo-nav] { color-scheme: light; }
+      .research-page .repo-content {
+        width: 100%;
+        max-width: 1530px;
+        min-width: 0;
+        padding: clamp(32px, 5vw, 76px) clamp(22px, 5vw, 76px) 84px;
+      }
+
+      .research-page .repo-content a { color: var(--accent); text-underline-offset: .2em; }
+      .research-page .repo-content a:hover { color: #d8f2e8; }
+      .research-page .repo-content a:focus-visible,
+      .research-page [tabindex="0"]:focus-visible {
+        outline: 2px solid #d2efe4;
+        outline-offset: 4px;
+        border-radius: 2px;
+      }
+      .research-page ::selection { background: #315d51; color: #fff; }
+
+      .report-header {
+        max-width: 950px;
+        padding: 0 0 clamp(46px, 6vw, 80px);
+      }
+      .report-header h1 {
+        margin: 0 0 24px;
+        max-width: 11ch;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(42px, 6vw, 78px);
+        font-weight: 400;
+        letter-spacing: -.035em;
+        line-height: 1.04;
+        text-wrap: balance;
+      }
+      .report-header .lede {
+        max-width: 66ch;
+        margin: 0;
+        color: #d2dbd8;
+        font-size: clamp(17px, 1.5vw, 21px);
+        line-height: 1.58;
+      }
+      .report-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 28px;
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      .report-meta a { font-weight: 650; }
+      .page-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 22px;
+        margin-top: 42px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        font-size: 14px;
+        font-weight: 650;
+      }
+      .page-links a { text-decoration: none; }
+      .page-links a:hover { text-decoration: underline; }
+
+      .report-section {
+        padding: clamp(50px, 6vw, 82px) 0;
+        border-top: 1px solid var(--line);
+        scroll-margin-top: 24px;
+      }
+      .report-section > h2 {
+        margin: 0 0 16px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(32px, 3.3vw, 48px);
+        font-weight: 400;
+        letter-spacing: -.025em;
+        line-height: 1.12;
+      }
+      .report-section h3 {
+        margin: 40px 0 14px;
+        font-size: clamp(17px, 1.6vw, 21px);
+        font-weight: 650;
+        line-height: 1.3;
+      }
+      .report-section > p,
+      .report-section .section-intro {
+        max-width: 72ch;
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .report-section strong { color: var(--ink); }
+      .report-section .source {
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .table-note {
+        margin: 0 0 10px !important;
+        color: var(--quiet) !important;
+        font-size: 12px !important;
+      }
+      .table-scroll {
+        overflow-x: auto;
+        scrollbar-color: #64736f #17201e;
+        scrollbar-width: thin;
+      }
+      .report-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 13px;
+        line-height: 1.55;
+        font-variant-numeric: tabular-nums;
+      }
+      .report-table caption {
+        padding: 0 0 15px;
+        color: var(--muted);
+        font-size: 13px;
+        text-align: left;
+      }
+      .report-table th,
+      .report-table td {
+        padding: 16px 16px 18px 0;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+        text-align: left;
+      }
+      .report-table thead th {
+        color: #cbd5d1;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .035em;
+      }
+      .report-table tbody th {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .report-table tbody tr:last-child th,
+      .report-table tbody tr:last-child td { border-bottom: 1px solid var(--line); }
+      .report-table td { color: #c2cfca; }
+      .report-table td .source,
+      .report-table th .source { display: inline-block; margin-top: 7px; }
+      .matrix { min-width: 1130px; }
+      .matrix th:first-child { min-width: 158px; width: 14%; }
+      .matrix th:nth-child(2) { min-width: 174px; width: 16%; }
+      .matrix th:nth-child(3) { min-width: 235px; width: 22%; }
+      .matrix th:nth-child(4) { min-width: 235px; width: 22%; }
+      .matrix th:nth-child(5) { min-width: 205px; width: 19%; }
+      .matrix th:nth-child(6) { min-width: 100px; width: 7%; }
+      .matrix tbody th span {
+        display: block;
+        margin-top: 5px;
+        color: var(--quiet);
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .evidence-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+        margin: 32px 0 0;
+      }
+      .evidence-grid figure { min-width: 0; margin: 0; }
+      .evidence-grid a {
+        display: block;
+        padding: 12px;
+        border: 1px solid var(--line);
+        background: #151d1c;
+      }
+      .evidence-grid img {
+        display: block;
+        width: 100%;
+        height: 238px;
+        object-fit: contain;
+        object-position: top center;
+      }
+      .evidence-grid figcaption {
+        padding-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .paired-lists {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(24px, 5vw, 72px);
+        margin-top: 14px;
+      }
+      .paired-lists ol,
+      .mechanisms,
+      .report-list { margin: 0; padding-left: 1.25em; }
+      .paired-lists li,
+      .mechanisms li,
+      .report-list li {
+        padding-left: .25em;
+        margin-bottom: 17px;
+        color: #c2cfca;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+      .paired-lists li::marker,
+      .mechanisms li::marker { color: var(--accent); font-weight: 700; }
+
+      .measure {
+        max-width: 850px;
+        padding: 24px 0 28px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        color: #dce5e1;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(20px, 2vw, 29px);
+        line-height: 1.45;
+      }
+      .measure strong { color: var(--accent); font-weight: 400; }
+      .benchmark-table { min-width: 720px; }
+      .benchmark-table th:first-child { width: 20%; }
+      .benchmark-table th:nth-child(2) { width: 40%; }
+      .benchmark-table th:nth-child(3) { width: 40%; }
+      .mechanisms { max-width: 880px; }
+      .mechanisms li { margin-bottom: 21px; font-size: 15px; }
+      .mechanisms strong { display: block; margin-bottom: 4px; }
+      .limit-note {
+        max-width: 880px;
+        margin-top: 22px;
+        padding: 19px 22px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: #c2cfca;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      .unknown {
+        max-width: 860px;
+        padding: 27px 30px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+      .unknown p { margin: 0 0 12px; color: #c2cfca; line-height: 1.65; }
+      .unknown p:last-child { margin-bottom: 0; }
+      .unknown strong { color: var(--accent); }
+      .conclusion-table { min-width: 900px; }
+      .conclusion-table th:first-child { width: 34%; }
+      .conclusion-table th:nth-child(2) { width: 46%; }
+      .conclusion-table th:nth-child(3) { width: 20%; }
+      .report-footer {
+        max-width: 840px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 1080px) {
+        .evidence-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+      @media (max-width: 760px) {
+        .research-page .repo-content { padding: 36px 24px 68px; }
+        .paired-lists { grid-template-columns: 1fr; gap: 0; }
+        .evidence-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 620px) {
+        .research-page .repo-layout { grid-template-columns: 118px minmax(0, 1fr); }
+        .research-page .repo-content { padding: 30px 16px 60px; }
+        .research-page .repo-nav { padding: 20px 6px; font-size: 12px; }
+        .research-page .repo-nav__heading { margin-left: 7px; margin-right: 5px; }
+        .research-page .repo-nav li > a { padding-left: 7px; padding-right: 5px; }
+        .report-header h1 { font-size: clamp(33px, 9vw, 43px); overflow-wrap: anywhere; }
+        .report-header .lede { font-size: 15px; }
+        .page-links { gap: 11px 18px; }
+        .evidence-grid { grid-template-columns: 1fr; }
+        .evidence-grid img { height: 265px; }
+        .unknown { padding: 22px 18px; }
+      }
+    </style>
+  </head>
+  <body class="research-page">
+    <div class="repo-layout">
+      <aside data-repo-nav></aside>
+      <main class="repo-content" id="main">
+        <header class="report-header">
+          <h1>Дослідження Rechovid</h1>
+          <p class="lede">Як особиста історія стає видимою поруч із мистецьким відгуком — і що досі не підтверджено для нашого продукту.</p>
+          <div class="report-meta">
+            <span>30 жовтня 2026</span>
+            <span>Джерела: публічні сторінки та знімки без входу до акаунтів</span>
+            <a href="research.md">Повний текст дослідження</a>
+          </div>
+          <nav class="page-links" aria-label="Розділи дослідження">
+            <a href="#competitors">Конкуренти</a>
+            <a href="#benchmark">Бенчмарк</a>
+            <a href="#patterns">Патерни</a>
+            <a href="#conclusions">Висновки</a>
+          </nav>
+        </header>
+
+        <section class="report-section" id="competitors" aria-labelledby="competitors-title">
+          <h2 id="competitors-title">Конкуренти</h2>
+          <p class="section-intro">П’ять прикладів із трьох груп: найближчий український аналог, продукти для частин сценарію та міжнародні орієнтири. «Не видно» описує лише відкриті екрани. <a class="source" href="notes/03-competitors.md">Вибірка 03</a> <a class="source" href="notes/04-matrix.md">Матриця 04</a></p>
+          <p class="table-note">Таблицю можна прокрутити горизонтально.</p>
+          <div class="table-scroll" role="region" aria-label="Матриця п’яти конкурентів" tabindex="0">
+            <table class="report-table matrix">
+              <caption>Порівняння за осями ключової задачі Rechovid</caption>
+              <thead><tr><th scope="col">Продукт</th><th scope="col">Перший екран</th><th scope="col">Річ → історія → робота</th><th scope="col">Цінність на вході</th><th scope="col">Завершення</th><th scope="col">Мова</th></tr></thead>
+              <tbody>
+                <tr>
+                  <th scope="row">The War Fragments Museum<span>Хард</span><a class="source" href="https://thewarfragments.com/">Сайт</a></th>
+                  <td>Гасло про історію війни та відео куба; конкретна історія далі. <a class="source" href="screens/war-fragments-home.png">Скрін</a></td>
+                  <td>Річ стає об’єктом у кубі. Самостійного додавання відгуку іншого митця не видно. <a class="source" href="https://thewarfragments.com/artifact/d2ddd0d6-cf51-11ed-bc12-bea17854255b">Артефакт</a></td>
+                  <td>Особиста річ заявлена одразу; досвід людини розгортається на сторінці артефакту. <a class="source" href="screens/war-fragments-artifact-story.png">Історія</a></td>
+                  <td>Куб і розповідь; у прикладі є аукціон. <a class="source" href="screens/war-fragments-artifact.png">Скрін</a></td>
+                  <td>Англійська. <a class="source" href="screens/war-fragments-home.png">Скрін</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Svidok.org<span>Софт</span><a class="source" href="https://svidok.org/">Сайт</a></th>
+                  <td>Заклик зберегти спогад; мистецьких робіт немає. <a class="source" href="screens/svidok-home.png">Скрін</a></td>
+                  <td>Запис або диктування спогаду. Власний запис вимагає акаунта: доступ обмежений. <a class="source" href="https://svidok.org/faq">FAQ</a></td>
+                  <td>Безпечне місце для пам’яті заявлене; зв’язок із митцем не заявлений. <a class="source" href="screens/svidok-home.png">Скрін</a></td>
+                  <td>Публічна нотатка без видимого мистецького відгуку. <a class="source" href="screens/svidok-notes.png">Нотатки</a></td>
+                  <td>Українська, перемикач UA/EN. <a class="source" href="screens/svidok-home.png">Скрін</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">BAROQUE<span>Софт</span><a class="source" href="https://thebaroque.app/">Сайт</a></th>
+                  <td>Відео виставки та доступ до мистецтва звідусіль. <a class="source" href="screens/baroque-home.png">Скрін</a></td>
+                  <td>Сайт веде до AR-застосунку; повний сценарій там — доступ обмежений. <a class="source" href="https://thebaroque.app/download">Завантаження</a></td>
+                  <td>Цінність перегляду мистецтва видно, почута історія оповідача не заявлена. <a class="source" href="screens/baroque-home.png">Скрін</a></td>
+                  <td>Опис обіцяє виставки, квитки, придбання; фінальний екран — доступ обмежений. <a class="source" href="https://play.google.com/store/apps/details?id=com.QWERTY.BaroqueGallery">Google Play</a></td>
+                  <td>Англійська. <a class="source" href="https://apps.apple.com/ua/app/baroque-gallery/id1583807961">App Store</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Artinscale<span>Аспіраційний</span><a class="source" href="https://www.artinscale.com/how-it-works">Сайт</a></th>
+                  <td>Обіцянка переходу від історій до мистецтва. <a class="source" href="screens/artinscale-how-it-works.png">Скрін</a></td>
+                  <td>Внески до теми → спільний бриф → робота. Відкритих тем 0: доступ обмежений. <a class="source" href="screens/artinscale-topics.png">Теми</a></td>
+                  <td>Зв’язок видно одразу; індивідуальне визнання пояснено нижче. <a class="source" href="https://www.artinscale.com/how-it-works">Процес</a></td>
+                  <td>Робота з історією створення в каталозі; купівля не обов’язкова. <a class="source" href="https://www.artinscale.com/how-it-works">Процес</a></td>
+                  <td>Англійська. <a class="source" href="screens/artinscale-how-it-works.png">Скрін</a></td>
+                </tr>
+                <tr>
+                  <th scope="row">Museum of Broken Relationships<span>Аспіраційний</span><a class="source" href="https://brokenships.com/explore">Сайт</a></th>
+                  <td>Запрошення дослідити музей; речі та історії нижче. <a class="source" href="screens/broken-relationships-explore.png">Скрін</a></td>
+                  <td>Подання речі та історії веде до входу: доступ обмежений; роботи-відгуку не видно. <a class="source" href="https://brokenships.com/share">Share</a></td>
+                  <td>Значення речей зрозуміле; «You are not alone» з’являється на Share. <a class="source" href="screens/broken-relationships-share.png">Скрін</a></td>
+                  <td>Експонат об’єднує образ речі, назву, місце, період та історію. <a class="source" href="screens/broken-relationships-object.png">Експонат</a></td>
+                  <td>Англійська в навігації. <a class="source" href="screens/broken-relationships-explore.png">Скрін</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="evidence-grid" aria-label="Скріншоти відкритих перших екранів">
+            <figure><a href="screens/war-fragments-home.png" aria-label="Відкрити повний скрін The War Fragments Museum"><img src="screens/war-fragments-home.png" alt="Перший екран The War Fragments Museum із кубом" loading="lazy"></a><figcaption>The War Fragments Museum</figcaption></figure>
+            <figure><a href="screens/svidok-home.png" aria-label="Відкрити повний скрін Svidok.org"><img src="screens/svidok-home.png" alt="Перший екран Svidok із закликом зберегти спогад" loading="lazy"></a><figcaption>Svidok.org</figcaption></figure>
+            <figure><a href="screens/baroque-home.png" aria-label="Відкрити повний скрін BAROQUE"><img src="screens/baroque-home.png" alt="Перший екран BAROQUE із відео виставки" loading="lazy"></a><figcaption>BAROQUE</figcaption></figure>
+            <figure><a href="screens/artinscale-how-it-works.png" aria-label="Відкрити повний скрін Artinscale"><img src="screens/artinscale-how-it-works.png" alt="Перший екран Artinscale із поясненням шляху від історії до мистецтва" loading="lazy"></a><figcaption>Artinscale</figcaption></figure>
+            <figure><a href="screens/broken-relationships-explore.png" aria-label="Відкрити повний скрін Museum of Broken Relationships"><img src="screens/broken-relationships-explore.png" alt="Перший екран Museum of Broken Relationships" loading="lazy"></a><figcaption>Museum of Broken Relationships</figcaption></figure>
+          </div>
+
+          <div class="paired-lists">
+            <div>
+              <h3>Спільні патерни ринку</h3>
+              <ol>
+                <li>На вході — тема або обіцянка; конкретна історія відкривається далі. <a class="source" href="screens/war-fragments-home.png">War Fragments</a> <a class="source" href="screens/svidok-home.png">Svidok</a></li>
+                <li>Перегляд відкритий, участь часто вимагає входу, відкритої теми чи застосунку. <a class="source" href="screens/artinscale-topics.png">Artinscale</a> <a class="source" href="https://brokenships.com/share">Museum</a></li>
+                <li>Результат подано як окремий артефакт, нотатку, роботу або експонат. <a class="source" href="screens/war-fragments-artifact-story.png">Артефакт</a> <a class="source" href="screens/broken-relationships-object.png">Експонат</a></li>
+              </ol>
+            </div>
+            <div>
+              <h3>Відмінності для Rechovid</h3>
+              <ol>
+                <li>War Fragments має одну кураторську форму куба; у Rechovid можливі різні готові роботи. <a class="source" href="screens/war-fragments-artifact.png">Куб</a> <a class="source" href="../Codex.md">Бриф</a></li>
+                <li>Artinscale збирає багато внесків у спільний бриф; Rechovid пов’язує роботу з конкретною історією. <a class="source" href="https://www.artinscale.com/how-it-works">Процес</a> <a class="source" href="../Codex.md">Бриф</a></li>
+                <li>Svidok і Museum завершують шлях історією чи експонатом, BAROQUE починає з виставки; Rechovid досліджує відгук на особисту історію. <a class="source" href="notes/04-matrix.md">Матриця</a> <a class="source" href="../Codex.md">Бриф</a></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="report-section" id="benchmark" aria-labelledby="benchmark-title">
+          <h2 id="benchmark-title">Бенчмарк</h2>
+          <p class="section-intro">Порівняння з іншими нішами допомагає побачити, як продукти роблять відповідь конкретної людини помітною. <a class="source" href="notes/05-benchmark.md">Оцінка семи критеріїв</a></p>
+          <p class="measure"><strong>Вимір — видимість адресного відгуку.</strong> Людина має зрозуміти, хто може почути саме її історію, як вона пов’язана з відповіддю і що свідчить про відгук. <a class="source" href="notes/05-benchmark.md">Джерело</a></p>
+          <div class="table-scroll" role="region" aria-label="Порівняння механізмів відгуку" tabindex="0">
+            <table class="report-table benchmark-table">
+              <caption>Чотири способи показати, що внесок дійшов до іншої людини</caption>
+              <thead><tr><th scope="col">Продукт</th><th scope="col">Що робить відгук видимим</th><th scope="col">Межа для Rechovid</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">StoryCorps Connect</th><td>Співрозмовники записують одну розмову, де чути обидва голоси. <a class="source" href="https://storycorps.org/participate/storycorps-connect/">Процес</a></td><td>Синхронна розмова потребує узгодженої участі двох людей; у брифі Rechovid відгук добровільний і може бути доданий пізніше. <a class="source" href="../Codex.md">Бриф</a></td></tr>
+                <tr><th scope="row">Storyworth</th><td>Історію надсилають обраним близьким; вони можуть відповісти. <a class="source" href="https://help.storyworth.com/en_US/manage-account/sharing-permissions">Доступ</a></td><td>Це приватний родинний обмін, а Rechovid планує публічний перегляд погоджених історій і робіт. <a class="source" href="../Codex.md">Бриф</a></td></tr>
+                <tr><th scope="row">Postcrossing</th><td>Одержувач реєструє листівку за ID, відправник отримує підтвердження та можливе повідомлення. <a class="source" href="https://www.postcrossing.com/help">FAQ</a></td><td>Взаємність вбудована в правило обміну картками; творчий відгук не можна гарантувати. <a class="source" href="https://www.postcrossing.com/about">Правило</a> <a class="source" href="../Codex.md">Бриф</a></td></tr>
+                <tr><th scope="row">Artinscale</th><td>Роботу супроводжують історією створення й поясненням впливу внесків. <a class="source" href="https://www.artinscale.com/how-it-works">Процес</a></td><td>Кілька внесків стають одним брифом; Rechovid має зберегти конкретний зв’язок однієї історії з роботою. <a class="source" href="https://www.artinscale.com/how-it-works">Процес</a> <a class="source" href="../Codex.md">Бриф</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Три механізми для MVP</h3>
+          <ol class="mechanisms">
+            <li><strong>Показати пару на вході.</strong> «Історія людини → робота митця» пояснює шлях одразу, як це робить Artinscale для внеску й твору. Відгук у Rechovid добровільний. <a class="source" href="https://www.artinscale.com/how-it-works">Artinscale</a> <a class="source" href="../Codex.md">Бриф</a></li>
+            <li><strong>Залишити початок і відповідь разом.</strong> Річ, історія, робота та коротке пояснення митця дають змогу побачити, на що саме він відгукнувся. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></li>
+            <li><strong>Назвати людей і погодити показ.</strong> Підписи оповідача та митця й узгоджені межі публікації роблять участь конкретною; згоди учасників пілота ще не перевірені. <a class="source" href="https://help.storyworth.com/en_US/manage-account/sharing-permissions">Storyworth</a> <a class="source" href="notes/05-benchmark.md">Бенчмарк</a> <strong>Дані не підтверджені.</strong></li>
+          </ol>
+          <p class="limit-note"><strong>Не переносити:</strong> обіцянку гарантованої відповіді за зразком Postcrossing. Там отримання картки є частиною правил обміну; мистецький відгук у Rechovid добровільний. <a class="source" href="https://www.postcrossing.com/about">Postcrossing</a> <a class="source" href="../Codex.md">Бриф</a></p>
+        </section>
+
+        <section class="report-section" id="patterns" aria-labelledby="patterns-title">
+          <h2 id="patterns-title">Патерни</h2>
+          <div class="unknown">
+            <p><strong>Дані не підтверджені.</strong> У <a href="notes/">нотатках дослідження</a> немає результату кроку 06, тому обраний патерн ключової задачі й причина вибору для Rechovid не встановлені.</p>
+            <p>Бриф описує шлях «річ → історія → готова робота», але сам по собі не визначає патерн інтерфейсу. <a class="source" href="../Codex.md">Бриф</a> <a class="source" href="research.md">Синтез</a></p>
+          </div>
+        </section>
+
+        <section class="report-section" id="conclusions" aria-labelledby="conclusions-title">
+          <h2 id="conclusions-title">Висновки</h2>
+          <p class="section-intro">Це гіпотези для перевірки, а не встановлені результати. Походження кожної прогалини позначене в останньому стовпці. <a class="source" href="research.md">Повні формулювання</a></p>
+          <div class="table-scroll" role="region" aria-label="Прогалини та гіпотези Rechovid" tabindex="0">
+            <table class="report-table conclusion-table">
+              <caption>Що перевірити в пілоті та наступних кроках</caption>
+              <thead><tr><th scope="col">Прогалина</th><th scope="col">Гіпотеза</th><th scope="col">Підстава</th></tr></thead>
+              <tbody>
+                <tr><td>На перших екранах часто не видно конкретної пари «історія → відгук». <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Ясна пара на вході допоможе глядачеві зрозуміти продукт без очікування гарантованої відповіді. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Конкуренти + бенчмарк. <a class="source" href="research.md">Синтез</a></td></tr>
+                <tr><td>Історія й робота часто подані окремо або зведені в колективний бриф. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Річ, історія, робота й пояснення на одній сторінці зроблять зв’язок зрозумілішим. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Конкуренти + бенчмарк. <a class="source" href="research.md">Синтез</a></td></tr>
+                <tr><td>Пряме самостійне додавання відгуку до конкретної історії не підтверджено у перевірених публічних сценаріях. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Якщо підготовлена пара викличе відчуття зв’язку, наступним тестом стане самостійне подання. Дієвість відкритого сценарію — дані не підтверджені. <a class="source" href="research.md">Синтез</a></td><td>Конкуренти + бенчмарк; патерн 06 — дані не підтверджені. <a class="source" href="research.md">Патерни</a></td></tr>
+                <tr><td>Для особистих історій важливі межі видимості й атрибуції. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Погоджені матеріали й підписи допоможуть учасникам оцінювати показ без невизначеності щодо авторства. Готовність дозволів — дані не підтверджені. <a class="source" href="research.md">Синтез</a></td><td>Бенчмарк + конкуренти. <a class="source" href="research.md">Синтез</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <footer class="report-footer">
+          <p>Використано лише публічні сторінки та <a href="screens/">знімки відкритих екранів</a>. З власного акаунта не взято нічого: теки <code>research/screens/own/</code> немає. Матеріали «Станції Сиваш» і згоди учасників у цих дослідницьких нотатках не перевірялися — дані не підтверджені. <a href="research.md">Повний синтез із джерелами</a>.</p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

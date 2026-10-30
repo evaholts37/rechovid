@@ -7,4 +7,10 @@ window.REPO_NAV_TREE = [
       { title: "Початок", path: "index.html" },
     ],
   },
+  {
+    title: "Ресерч",
+    pages: [
+      { title: "Зведення дослідження", path: "research/research.html" },
+    ],
+  },
 ];
