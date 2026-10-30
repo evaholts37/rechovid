@@ -257,15 +257,17 @@
         line-height: 1.65;
       }
 
-      .unknown {
+      .pattern-choice {
         max-width: 860px;
         padding: 27px 30px;
         border: 1px solid var(--line);
         background: var(--panel);
       }
-      .unknown p { margin: 0 0 12px; color: #c2cfca; line-height: 1.65; }
-      .unknown p:last-child { margin-bottom: 0; }
-      .unknown strong { color: var(--accent); }
+      .pattern-choice p { margin: 0 0 12px; color: #c2cfca; line-height: 1.65; }
+      .pattern-choice p:last-child { margin-bottom: 0; }
+      .pattern-choice strong { color: var(--accent); }
+      .pattern-choice .report-list { margin-top: 18px; }
+      .pattern-alternatives p { color: #c2cfca; font-size: 14px; line-height: 1.65; }
       .conclusion-table { min-width: 900px; }
       .conclusion-table th:first-child { width: 34%; }
       .conclusion-table th:nth-child(2) { width: 46%; }
@@ -298,7 +300,7 @@
         .page-links { gap: 11px 18px; }
         .evidence-grid { grid-template-columns: 1fr; }
         .evidence-grid img { height: 265px; }
-        .unknown { padding: 22px 18px; }
+        .pattern-choice { padding: 22px 18px; }
       }
     </style>
   </head>
@@ -431,10 +433,20 @@
 
         <section class="report-section" id="patterns" aria-labelledby="patterns-title">
           <h2 id="patterns-title">Патерни</h2>
-          <div class="unknown">
-            <p><strong>Дані не підтверджені.</strong> У <a href="notes/">нотатках дослідження</a> немає результату кроку 06, тому обраний патерн ключової задачі й причина вибору для Rechovid не встановлені.</p>
-            <p>Бриф описує шлях «річ → історія → готова робота», але сам по собі не визначає патерн інтерфейсу. <a class="source" href="../Codex.md">Бриф</a> <a class="source" href="research.md">Синтез</a></p>
+          <p class="section-intro">П’ять способів організувати шлях від речі до мистецького відгуку порівняно за тим, хто ініціює контакт і де живе результат. <a class="source" href="notes/06-patterns.md">Порівняння 06</a></p>
+          <div class="pattern-choice">
+            <p><strong>Обрано: публічна історія як осередок асинхронних відгуків.</strong> Оповідач публікує річ та історію; митці самостійно додають готові роботи, які глядач бачить поруч із нею. <a class="source" href="notes/06-patterns.md">Крок 06</a></p>
+            <ol class="report-list">
+              <li>У центрі залишається конкретна людина й її річ. <a class="source" href="../Codex.md">Бриф</a></li>
+              <li>Не потрібні чат або кураторське рішення перед відгуком. <a class="source" href="../Codex.md">Межі MVP</a></li>
+              <li>Одна історія може мати кілька робіт; небажаний зв’язок можна прибрати, не видаляючи сам твір. <a class="source" href="../Codex.md">Відв’язування</a></li>
+            </ol>
           </div>
+          <div class="paired-lists pattern-alternatives">
+            <div><h3>Другий за умови</h3><p>Адресне запрошення митця має сенс, якщо люди захочуть звертатися до конкретного автора, а митці будуть готові приймати запити. Це пізніший напрям продукту. <a class="source" href="notes/06-patterns.md">Умова</a> <a class="source" href="../Codex.md">Бриф</a></p></div>
+            <div><h3>Не підходить</h3><p>Стрічка дописів і реміксів розмиває стійкий зв’язок історії з роботою; алгоритмічна стрічка й відкриті коментарі виключені з MVP. <a class="source" href="notes/06-patterns.md">Висновок</a> <a class="source" href="../Codex.md">Бриф</a></p></div>
+          </div>
+          <p class="limit-note">Тижневий показ із підготовленими матеріалами може перевірити, чи глядач розуміє пару «історія + робота». Самостійне подання й відв’язування він не перевірить. <a class="source" href="notes/06-patterns.md">Межа пілота</a></p>
         </section>
 
         <section class="report-section" id="conclusions" aria-labelledby="conclusions-title">
@@ -447,8 +459,9 @@
               <tbody>
                 <tr><td>На перших екранах часто не видно конкретної пари «історія → відгук». <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Ясна пара на вході допоможе глядачеві зрозуміти продукт без очікування гарантованої відповіді. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Конкуренти + бенчмарк. <a class="source" href="research.md">Синтез</a></td></tr>
                 <tr><td>Історія й робота часто подані окремо або зведені в колективний бриф. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Річ, історія, робота й пояснення на одній сторінці зроблять зв’язок зрозумілішим. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Конкуренти + бенчмарк. <a class="source" href="research.md">Синтез</a></td></tr>
-                <tr><td>Пряме самостійне додавання відгуку до конкретної історії не підтверджено у перевірених публічних сценаріях. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Якщо підготовлена пара викличе відчуття зв’язку, наступним тестом стане самостійне подання. Дієвість відкритого сценарію — дані не підтверджені. <a class="source" href="research.md">Синтез</a></td><td>Конкуренти + бенчмарк; патерн 06 — дані не підтверджені. <a class="source" href="research.md">Патерни</a></td></tr>
+                <tr><td>Пряме самостійне додавання відгуку до конкретної історії не підтверджено у перевірених публічних сценаріях. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Якщо підготовлена пара викличе відчуття зв’язку, наступним тестом стане самостійне подання. Дієвість відкритого сценарію — дані не підтверджені. <a class="source" href="notes/06-patterns.md">Межа пілота</a></td><td>Конкуренти + бенчмарк + патерни. <a class="source" href="research.md">Синтез</a></td></tr>
                 <tr><td>Для особистих історій важливі межі видимості й атрибуції. <a class="source" href="notes/05-benchmark.md">Бенчмарк</a></td><td>Погоджені матеріали й підписи допоможуть учасникам оцінювати показ без невизначеності щодо авторства. Готовність дозволів — дані не підтверджені. <a class="source" href="research.md">Синтез</a></td><td>Бенчмарк + конкуренти. <a class="source" href="research.md">Синтез</a></td></tr>
+                <tr><td>У відкритих прикладах не підтверджено керованого зв’язку, де історія й робота лишаються окремими записами. <a class="source" href="notes/04-matrix.md">Матриця</a></td><td>Сторінка речі як осередок окремих робіт допоможе простежити відгук і згодом прибрати небажану пару без автоматичного видалення твору. Тест відв’язування в тижневому показі — дані не підтверджені. <a class="source" href="notes/06-patterns.md">Вибір 06</a></td><td>Патерни + бриф. <a class="source" href="../Codex.md">Сценарій</a></td></tr>
               </tbody>
             </table>
           </div>
