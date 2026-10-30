@@ -15,4 +15,5 @@
 - [Попередні продуктові нотатки](product-idea.md)
 - [Дослідження](research/)
 - [Дослідження екранів](research/screens/)
+- [03. Конкуренти й референси](research/notes/03-competitors.md)
 - Навігатор: [дерево сторінок](_nav/tree.js), [скрипт](_nav/nav.js), [стилі](_nav/nav.css)
