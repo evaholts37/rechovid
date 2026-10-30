@@ -46,7 +46,7 @@
 
   const heading = document.createElement("a");
   heading.className = "repo-nav__heading";
-  heading.textContent = "Речовідь / матеріали";
+  heading.textContent = "Rechovid / матеріали";
   heading.href = new URL("index.html", root).href;
   nav.append(heading);
 

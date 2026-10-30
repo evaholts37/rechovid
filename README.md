@@ -1,4 +1,4 @@
-# Речовідь
+# Rechovid
 
 Репозиторій: https://github.com/evaholts37/rechovid · Сайт: https://evaholts37.github.io/rechovid/
 
